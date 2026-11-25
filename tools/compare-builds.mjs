@@ -9,7 +9,11 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
-const [mainDir, branchDir] = process.argv.slice(2).map((p) => path.resolve(p));
+// --expect-changed a.html,b.html: files the branch changes on purpose (listed, not failed).
+const argv = process.argv.slice(2);
+const ei = argv.indexOf("--expect-changed");
+const expected = new Set(ei >= 0 ? argv.splice(ei, 2)[1].split(",") : []);
+const [mainDir, branchDir] = argv.map((p) => path.resolve(p));
 if (!mainDir || !branchDir) {
   console.error("Usage: node tools/compare-builds.mjs <main dist> <branch dist>");
   process.exit(2);
@@ -47,6 +51,7 @@ for (const f of mainFiles) {
   }
   if (/\.(html|xml|txt|json|js|css)$/.test(f) || f === "_redirects") {
     if (normalize(a.toString("utf8")) === normalize(b.toString("utf8"))) same.push(f);
+    else if (expected.has(f)) console.log(`CHANGED ON PURPOSE: ${f}`);
     else {
       problems++;
       const as = normalize(a.toString("utf8"));
@@ -65,5 +70,5 @@ for (const f of same.filter((x) => x.endsWith(".html") || x.startsWith("_") || x
 console.log(`Added in branch: ${added.length} files (${added.filter((f) => f.startsWith("agents/")).length} under agents/)`);
 for (const f of added.filter((x) => !x.startsWith("agents/"))) console.log(`  + ${f}`);
 if (notAdditive.length) { console.log(`NOT ADDITIVE: ${notAdditive.join(", ")}`); problems++; }
-console.log(problems ? `\n${problems} problem(s).` : "\nOK: every existing file is unchanged; the branch only adds files.");
+console.log(problems ? `\n${problems} problem(s).` : "\nOK: every existing file is unchanged apart from any listed as changed on purpose; the branch only adds files.");
 process.exit(problems ? 1 : 0);

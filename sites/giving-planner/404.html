@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found | Pune Giving Planner</title>
+    <meta name="description" content="This page is not in the planner. Fill the empty jar, then head back to plan your giving year." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0f766e" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600&family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/404.js"></script>
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>Pune Giving Planner</a>
+      <nav aria-label="Main"><a href="/#planner">Plan</a><a href="/#assistant">Ask</a><a href="/#questions">Questions</a></nav>
+    </header>
+    <main class="lost">
+      <div class="wrap">
+        <button type="button" class="lost-jar" id="lost-jar" aria-describedby="lost-count">
+          <svg viewBox="0 0 200 230" role="img" aria-label="An empty jar. Press it to drop in a coin.">
+            <ellipse cx="100" cy="218" rx="72" ry="8" fill="#1f2f3d" opacity="0.08" />
+            <path class="fill-404" d="M60 66c-13 12-20 29-20 51v66c0 18 12 29 31 29h58c19 0 31-11 31-29v-66c0-22-7-39-20-51z" fill="#f2a93b" />
+            <path d="M58 62c-14 12-22 30-22 54v68c0 20 14 32 34 32h60c20 0 34-12 34-32v-68c0-24-8-42-22-54z" fill="none" stroke="#0f766e" stroke-width="6" stroke-linejoin="round" />
+            <rect x="62" y="42" width="76" height="24" rx="12" fill="#0f766e" />
+            <text x="100" y="128" text-anchor="middle" font-family="Caveat, cursive" font-size="26" fill="#5f6b74">month 13</text>
+          </svg>
+        </button>
+        <h1>This page isn't in the planner</h1>
+        <p>A year only has twelve jars, so this one is empty. Press it to drop in a coin, or head back and plan the real ones.</p>
+        <p class="count" id="lost-count" aria-live="polite"></p>
+        <p><a class="btn btn-primary" href="/">Back to the planner</a></p>
+      </div>
+    </main>
+  </body>
+</html>

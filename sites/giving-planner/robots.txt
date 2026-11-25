@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /runtime/
+Disallow: /lib/
+
+Sitemap: https://pune-giving-planner.pages.dev/sitemap.xml

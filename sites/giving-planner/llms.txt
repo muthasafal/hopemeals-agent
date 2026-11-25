@@ -1,0 +1,19 @@
+# Pune Giving Planner
+
+> Plan a year of giving in Pune, then ask a partner charity's own assistant what your money funds. Private details stay on your device.
+
+Pune Giving Planner is a small, free planning page and an open agentic website (Open Agentic Web MVP spec 0.3). A donor or CSR team sets a yearly giving total and how many months to spread it over. Its assistant can ask a partner charity's own published agent network what an amount funds. It is not a charity, takes no money and gives no tax advice.
+
+## Facts
+- Partner charity: HopeMeals (student meal support in Pune), asked through its network at http://127.0.0.1:8788/agents/hopemeals_assistant
+- The assistant runs in the visitor's browser on the visitor's own AI key. Private details (PAN, phone, email, Aadhaar) are removed on the device before anything is sent.
+- Donations happen only on the charity's own website.
+
+## Pages
+- [Planner and assistant](https://pune-giving-planner.pages.dev/): plan the year, ask the charity
+- [Privacy policy](https://pune-giving-planner.pages.dev/privacy): what is processed, where, and for how long
+- [Terms](https://pune-giving-planner.pages.dev/terms): terms of use under Indian law
+
+## Agent files
+- [Agent manifest](https://pune-giving-planner.pages.dev/agent-manifest.json)
+- [Network](https://pune-giving-planner.pages.dev/pune_giving_planner.network.json)

@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "sites/giving-planner/index.html"
+        ],
+        "createdAt": "2026-11-25T11:51:02.831Z",
+        "reason": "Claude: the flagged #1f2f3d is the ink-tinted soft elevation shadow on a light page (house 'ink-tinted shadow' rule), not a coloured glow"
+      }
+    ]
+  }
+}

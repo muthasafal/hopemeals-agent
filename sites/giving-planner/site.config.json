@@ -1,0 +1,24 @@
+{
+  "name": "Pune Giving Planner",
+  "siteUrl": "https://pune-giving-planner.pages.dev",
+  "description": "Plan a year of giving in Pune, then ask a partner charity's own assistant what your money funds. Private details stay on your device.",
+  "partner": {
+    "name": "HopeMeals",
+    "networkUrl": "http://127.0.0.1:8788/agents/hopemeals_assistant",
+    "origin": "http://127.0.0.1:8788",
+    "pageUrl": "http://127.0.0.1:8788/"
+  },
+  "aiProviders": [
+    "https://api.otari.ai",
+    "https://eu.api.otari.ai",
+    "https://otari.ai",
+    "https://openrouter.ai",
+    "https://generativelanguage.googleapis.com"
+  ],
+  "contact": "https://github.com/muthasafal/hopemeals-agent/issues",
+  "pages": [
+    { "path": "/", "file": "index.html", "priority": 1.0 },
+    { "path": "/privacy", "file": "privacy.html", "priority": 0.3 },
+    { "path": "/terms", "file": "terms.html", "priority": 0.3 }
+  ]
+}

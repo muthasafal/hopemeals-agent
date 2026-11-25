@@ -1,4 +1,4 @@
-# Status (25 Nov 2026, second pass)
+# Status (25 Nov 2026, third pass)
 
 ## Done
 - `docs/SPEC_NOTES.md`: file formats, the LLM client interface, the four outbound hook points, how partner calls work.
@@ -30,9 +30,21 @@ Note: `npm run build` refreshes `src/content/siteContent.json` from live Firebas
 Fixed during the browser check: the prefill now waits for React to hydrate the prerendered form (before, college was lost); the donation fallback link no longer shows early; the Planner's jar labels and amount field have more padding; the Planner ground is now pale sky with deep ink (no cream).
 
 ## Left to do
-1. Owner decisions: whether HopeMeals has a published income limit (until then income shows as "provided, kept on this device"); the hosted Planner origin for `bridge/handoff-window.js` CALLERS and the Planner's partner URL; `index: false` on /assistant; pushing the HM branch (commits `4165712`, `1a733c8`, `e0891c4`, local only).
-2. The runtime's settings panel also offers OpenAI, Anthropic and Groq, but the /assistant CSP allows only Otari, OpenRouter and Google (as the brief says). Picking one of those three fails with a CSP error. Either widen `connect-src` or accept it. This is the owner's choice.
+1. Owner decisions: whether HopeMeals has a published income limit (until then income shows as "provided, kept on this device"); the hosted Planner origin for `bridge/handoff-window.js` CALLERS and the Planner's partner URL; `index: false` on /assistant; pushing the HM branch (commits `4165712`, `1a733c8`, `e0891c4`, `fad0859`, local only).
+2. Done: the runtime's settings panel no longer shows OpenAI, Anthropic or Groq on either site (hidden with CSS, since the CSP blocks them). To offer them, add their API hosts to `connect-src` and remove the CSS rule.
 3. Live check with a real key and real Gemini Nano (everything so far is mocked). On a Cloudflare preview deployment: check `_headers` behave as `tools/serve-pages.mjs` simulates.
 4. Upstream: post the #32 comment in `docs/UPSTREAM.md`, then a PR if the maintainers want one. **Only after Safal approves.**
 5. Not exercised: the application's final submit and uploads (`/api/uploads`, `/api/submitApplication`): the branch does not touch them, and the static and browser comparisons cover the page itself.
 6. Remove the `../_vendor/hm-main` worktree when done (`git worktree remove`, from HM/frontend).
+
+## safaldev pre-ship checklist (third pass)
+
+| Group | Giving Planner | HopeMeals /assistant (branch) |
+| --- | --- | --- |
+| Honesty and content | Pass. No figures of its own: every charity fact comes from the partner. No placeholders, no emoji icons, no em dashes in our files, no purple. | Pass. Facts come from the site's own data at build time; no invented numbers; no em dashes in added files. |
+| Legal | Fixed: added `/terms` (Indian law, Pune courts, no tax advice) and `/privacy` (DPDP Act 2023, a full retention table: plan, messages, key, partner requests, donations, logs). | Fixed: added "The HopeMeals assistant" to `/privacy` (date updated to 25 Nov 2026), linked from `/assistant`. Owner please review the wording. |
+| Security | Fixed: `_headers` with an enforcing CSP, HSTS, nosniff, `X-Frame-Options: DENY`, COOP, Permissions-Policy; CORS only on public agent files; bridge frameable. No secrets in git history; `npm audit` 0 vulnerabilities. No server, so rate limits, auth and database rules are not applicable. | Pass: CSP on /assistant (no inline scripts), CORS only on agent files, bridge headers detached; backend and functions untouched. |
+| SEO and polish | Fixed: canonical tags, OG/Twitter with a 1200x630 image rendered from code, favicon set (SVG, ICO, 32, 180, 192, 512, maskable, webmanifest), JSON-LD (WebSite, WebApplication, FAQPage matching a visible FAQ, BreadcrumbList on inner pages), robots.txt, sitemap.xml, llms.txt, a playable 404 (fill "month 13") with a true 404 status, breadcrumbs, one h1 per page, zero console errors under the CSP. LocalBusiness: not applicable (no premises). | Pass: route in `routes.ts` (title, description, `index: false` until the owner decides), PageHero breadcrumbs, prerendered, zero console errors in tests. |
+| Design taste | Fixed: pale sky ground with deep ink (no cream), a hero jar with falling coins and sloshing fill (the signature "year of jars"), FAQ toggles, sentence-case runtime labels, roomier padding; PRODUCT.md and DESIGN.md written. One design-hook finding suppressed narrowly: `dark-glow` on `index.html` flagged the ink-tinted soft elevation shadow, which the house rules call for. | Pass: HM DESIGN.md tokens, one solid orange action in the dialog. |
+
+Needs the owner: the Planner's hosted address (`site.config.json`, then `scripts/build-site.mjs` and `npm run build:planner`), HopeMeals' production partner URL, approval of the privacy wording, and the HM push and deploy. The vendored runtime (`runtime/`) is copied unchanged by the spec's rule, so its own comments and UI strings were not edited.

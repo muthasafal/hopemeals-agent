@@ -45,6 +45,8 @@ test("the planner asks HopeMeals by URL, and donating opens HopeMeals' own page"
   const llm = await mockLLM(context, script);
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
+  // A CSP violation or any script error shows up here.
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 
   await page.goto(PLANNER);
   await expect(page.locator("#assistant-status")).toHaveText("Assistant ready.");
