@@ -1,0 +1,23 @@
+{
+  "name": "hopemeals-agent",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:unit": "node --test \"packages/*/test/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "build:planner": "node ../_vendor/agentic-web/skills/agentify-website/scripts/build_network.mjs sites/giving-planner/pune_giving_planner.hocon --manifest sites/giving-planner/agent-manifest.json",
+    "sync:hm": "node tools/sync-hm.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "fast-check": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

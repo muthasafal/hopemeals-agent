@@ -1,0 +1,84 @@
+/* Default look for the "What this agent will learn about you" card.
+   Theme it with these variables; the HopeMeals values are the defaults. */
+.ag-card {
+  --ag-ink: #1d2b22;
+  --ag-body: #3b4a40;
+  --ag-muted: #66756b;
+  --ag-ground: #f4f8f2;
+  --ag-border: #d3e3cb;
+  --ag-keep: #215e31;
+  --ag-keep-bg: #ecfaef;
+  --ag-cut: #9a3412;
+  --ag-cut-bg: #fff5eb;
+  --ag-button: #2d7341;
+  --ag-radius: 24px;
+  margin: 10px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--ag-border);
+  border-radius: var(--ag-radius);
+  background: var(--ag-ground);
+  color: var(--ag-body);
+  font: inherit;
+  line-height: 1.5;
+}
+.ag-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ag-ink);
+}
+.ag-title:focus { outline: none; }
+.ag-title:focus-visible { outline: 3px solid var(--ag-button); outline-offset: 3px; border-radius: 8px; }
+.ag-lead { margin: 0 0 8px; font-size: 0.92rem; }
+.ag-list { margin: 0 0 10px; padding-left: 1.2em; font-size: 0.92rem; }
+.ag-list li { margin: 2px 0; }
+.ag-diff {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--ag-border);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ag-diff-row { margin: 0; }
+.ag-diff-label {
+  display: inline-block;
+  min-width: 6.5em;
+  margin-right: 6px;
+  font-weight: 700;
+  color: var(--ag-muted);
+}
+.ag-removed {
+  text-decoration: line-through;
+  color: var(--ag-cut);
+  background: var(--ag-cut-bg);
+  border-radius: 6px;
+  padding: 0 3px;
+}
+.ag-added {
+  text-decoration: none;
+  color: var(--ag-keep);
+  background: var(--ag-keep-bg);
+  border-radius: 6px;
+  padding: 0 3px;
+  font-weight: 600;
+}
+.ag-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ag-actions button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1), color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ag-send { background: var(--ag-button); color: #fff; border: 2px solid var(--ag-button); }
+.ag-send:hover { background: #215e31; border-color: #215e31; }
+.ag-stop { background: transparent; color: var(--ag-keep); border: 2px solid #3d8854; }
+.ag-stop:hover { background: #3d8854; color: #fff; }
+.ag-note { margin: 10px 0 0; font-size: 0.88rem; font-weight: 600; color: var(--ag-keep); }
+@media (prefers-reduced-motion: reduce) { .ag-actions button { transition: none; } }

@@ -1,0 +1,11 @@
+{
+  "name": "@hopemeals/nano-provider",
+  "version": "0.1.0",
+  "description": "Use Chrome's built-in Gemini Nano (Prompt API) inside the Open Agentic Web runtime for small private steps, with a structured-output tool-choice shim.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./src/index.js",
+  "exports": { ".": "./src/index.js" },
+  "files": ["src", "README.md"],
+  "scripts": { "test": "node --test \"test/*.test.mjs\"" }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@hopemeals/airlock-gate",
+  "version": "0.1.0",
+  "description": "On-device privacy gate for outgoing agent messages on the Open Agentic Web runtime.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./src/index.js",
+  "exports": { ".": "./src/index.js" },
+  "files": ["src", "README.md"],
+  "scripts": { "test": "node --test \"test/*.test.mjs\"" }
+}
