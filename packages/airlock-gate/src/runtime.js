@@ -9,6 +9,9 @@
 
 const PATCHED = Symbol.for("airlock-gate.patched");
 
+/** The destination name for a site-paid router on the page's own origin (a relative URL). */
+export const SITE_AI = "this site's AI service";
+
 function hostOf(url) {
   try { return new URL(url).host; } catch { return String(url || "?"); }
 }
@@ -31,7 +34,8 @@ export function installOnRuntime(gate, { LlmClient, Engine, ActionRegistry, page
   const chat = LlmClient.prototype.chat;
   if (!chat[PATCHED]) {
     const gatedChat = async function gatedChat(request) {
-      const destination = this.baseUrl === "browser://mock" ? "mock router (this browser)" : hostOf(this.baseUrl);
+      const destination = this.baseUrl === "browser://mock" ? "mock router (this browser)"
+        : String(this.baseUrl).startsWith("/") ? SITE_AI : hostOf(this.baseUrl);
       const safe = await gate.gateModelCall(request, destination);
       return chat.call(this, safe);
     };

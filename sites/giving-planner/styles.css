@@ -201,3 +201,9 @@ body > dialog button { margin: 8px 8px 0 0; min-height: 44px; padding: 10px 20px
   .hero-grid, .how-grid { grid-template-columns: 1fr; }
   .hero-jar { max-width: 240px; }
 }
+
+/* Visitors never set anything up: the site's own AI proxy answers (site-paid mode). */
+#agent-app [data-ns-slot="settings"],
+#agent-app .ns-llmbadge,
+#agent-app .ns-devtoggle,
+#agent-app .ns-action-status { display: none !important; }

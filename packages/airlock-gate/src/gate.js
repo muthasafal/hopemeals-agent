@@ -176,6 +176,7 @@ export class AirlockGate {
    */
   async scrubMessages(messages) {
     const items = [];
+    const userItems = [];
     const out = [];
     let lastUser = -1;
     for (let i = 0; i < messages.length; i++) if (messages[i]?.role === "user") lastUser = i;
@@ -190,6 +191,7 @@ export class AirlockGate {
         const r = await this.scrubText(m.content, { strict });
         next.content = r.text;
         items.push(...r.items);
+        if (m.role === "user") userItems.push(...r.items);
         if (i === lastUser) { before = m.content; after = r.text; segments = r.segments; }
       } else if (Array.isArray(m.content)) {
         const r = await this.scrubValue(m.content, { strict });
@@ -214,7 +216,7 @@ export class AirlockGate {
       }
       out.push(next);
     }
-    return { messages: out, items, before, after, segments };
+    return { messages: out, items, userItems, before, after, segments };
   }
 
   /**
@@ -262,7 +264,9 @@ export class AirlockGate {
    */
   async gateModelCall(request, destination) {
     const r = await this.scrubMessages(request.messages || []);
-    await this.review({ channel: "model", destination, items: r.items, before: r.before, after: r.after, segments: r.segments, changed: r.items.length > 0 });
+    // Only the visitor's own words need their OK. Site text and tool results are cleaned
+    // too, silently: they hold nothing the visitor typed into the chat.
+    await this.review({ channel: "model", destination, items: r.userItems, before: r.before, after: r.after, segments: r.segments, changed: r.items.length > 0 });
     return { ...request, messages: r.messages };
   }
 

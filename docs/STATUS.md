@@ -48,3 +48,33 @@ Fixed during the browser check: the prefill now waits for React to hydrate the p
 | Design taste | Fixed: pale sky ground with deep ink (no cream), a hero jar with falling coins and sloshing fill (the signature "year of jars"), FAQ toggles, sentence-case runtime labels, roomier padding; PRODUCT.md and DESIGN.md written. One design-hook finding suppressed narrowly: `dark-glow` on `index.html` flagged the ink-tinted soft elevation shadow, which the house rules call for. | Pass: HM DESIGN.md tokens, one solid orange action in the dialog. |
 
 Needs the owner: the Planner's hosted address (`site.config.json`, then `scripts/build-site.mjs` and `npm run build:planner`), HopeMeals' production partner URL, approval of the privacy wording, and the HM push and deploy. The vendored runtime (`runtime/`) is copied unchanged by the spec's rule, so its own comments and UI strings were not edited.
+
+## Fourth pass (no visitor keys, chat bubble) - 25 Nov 2026
+
+### Done
+- **No key for visitors.** New Pages Function `functions/api/assistant/[[path]].ts` (HopeMeals, and a copy in `sites/giving-planner/functions/`): a same-origin proxy that adds the Gemini key from the secret `ASSISTANT_GEMINI_KEY` and streams the reply. Models: `gemini-flash-lite-latest`, falling back to `gemini-3.5-flash-lite` and `gemini-flash-latest` when Google is busy. Both manifests use it in site-paid mode (`base_url: /api/assistant`). Gemini Nano is still used first for small read-only steps when Chrome has it.
+- **Built-in rate limiting** (no outside service): the proxy counts per visitor (hashed IP) 24 calls/minute and 300/day, plus 4,000/day site-wide, with size caps, a forced model and `max_tokens`; the page adds a per-tab limit (18/minute, 150/hour) with a friendly message.
+- **No setup for consumers:** the runtime's provider settings, key badge, developer toggle and action list are hidden on both sites.
+- **Chat bubble** ("Ask us", bottom right, every page except `/assistant`): opens `/assistant?embed=1` (chat only, quick questions, a private-details drawer). Inside it, the assistant moves the page underneath to the right form and fills it there, and opens the donation page in place, while the chat stays open. Back-to-top moved up to make room.
+- **Links:** "Ask us" in the navbar (desktop and mobile menu) and "Not sure yet? Ask our assistant, privately" under the home hero buttons.
+- **Gate fixes found in the live run:** the privacy card now asks only about the visitor's own words (site text and tool results are still cleaned, silently), and IDs such as UUIDs are no longer read as phone or Aadhaar numbers. 36 unit tests pass.
+- Commits: this repo (see git log); HM branch `3ad5f5a`, **local only**.
+
+### Next
+1. **Live check, again.** The first real-model run (before the gate fix) showed the card firing on site text, which blocked the answer. Re-run the bubble flow and the full page with the proxy (commands below), including the bubble filling `/signup` on the page underneath.
+2. **Update the E2E tests** for site-paid mode: mock `**/api/assistant/chat/completions` instead of Otari, drop `seedKey`, and add a bubble test (open on `/`, ask to fill the application, check the page's own `/signup` fields). The current specs still seed a key and will need this before they pass again.
+3. Rebuild HM (`npm run build` in `HM/frontend`, then revert `src/content/siteContent.json` and `tsconfig.app.tsbuildinfo`) and rerun `tools/compare-builds.mjs` with `--expect-changed` for the pages whose navbar and hero changed. Every page now differs on purpose (navbar link), so the browser regression spec is the check that matters.
+4. Owner: set the Pages secret `ASSISTANT_GEMINI_KEY` (Cloudflare dashboard, Settings, Variables and Secrets, encrypted) on HopeMeals, and later on the Planner's Pages project.
+
+### Open decision
+- **Pushing the HM branch: on hold** until the Cloudflare Pages preview settings are checked: the branch must build as a preview only (no production deploy) and the preview needs the `ASSISTANT_GEMINI_KEY` secret set for the Preview environment.
+
+### Restart the local servers
+From `hopemeals-agent/`:
+
+```shell
+node tools/serve-pages.mjs ../../HM/frontend/dist --port 8788 --functions ../../HM/frontend/functions --env ../../HM/frontend/.dev.vars
+node tools/serve-pages.mjs sites/giving-planner --port 8081 --functions sites/giving-planner/functions --env sites/giving-planner/.dev.vars
+```
+
+Open `http://127.0.0.1:8788/` (HopeMeals, with the bubble) and `http://localhost:8081/` (Planner). Both `.dev.vars` files hold the Gemini key and are git-ignored; never commit them.

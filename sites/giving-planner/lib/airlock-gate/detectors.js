@@ -77,9 +77,9 @@ const PATTERNS = [
   // PAN: AAAAA9999A, any case.
   { category: "PAN", re: /(?<![A-Za-z0-9])[A-Za-z]{5}[0-9]{4}[A-Za-z](?![A-Za-z0-9])/g, confidence: 0.95 },
   // Aadhaar: 12 digits, first 2-9, optional spaces or hyphens every 4; Verhoeff checked below.
-  { category: "AADHAAR", re: /(?<![\d])[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}(?![\d])/g, confidence: 0.97, check: (t) => verhoeffValid(digitsOnly(t)) },
+  { category: "AADHAAR", re: /(?<![A-Za-z0-9_-])[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}(?![A-Za-z0-9])/g, confidence: 0.97, check: (t) => verhoeffValid(digitsOnly(t)) },
   // Indian mobile: optional +91 / 91 / 0, then 10 digits starting 6-9, any spaces or hyphens.
-  { category: "PHONE", re: /(?<![\d+])(?:(?:\+|00)91[ -]?|91[ -]|0)?[6-9](?:[ -]?\d){9}(?![\d])/g, confidence: 0.9 },
+  { category: "PHONE", re: /(?<![A-Za-z0-9+_-])(?:(?:\+|00)91[ -]?|91[ -]|0)?[6-9](?:[ -]?\d){9}(?![A-Za-z0-9])/g, confidence: 0.9 },
   // Reservation categories: full names any case; short forms only in capitals.
   {
     category: "RESERVATION",

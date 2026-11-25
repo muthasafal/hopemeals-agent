@@ -5,7 +5,7 @@
 // airlock-gate.css (or your own rules on the .ag-* classes).
 
 const DEST = {
-  model: (d) => `your AI provider (${d})`,
+  model: (d) => (d === "this site's AI service" ? "the AI behind this assistant" : `your AI provider (${d})`),
   partner: (d) => `the partner site ${d}`,
   "partner-action": (d) => `the partner site ${d}`,
 };

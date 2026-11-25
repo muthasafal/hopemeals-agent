@@ -174,3 +174,26 @@ test("VaultDetector ignores empty and very short values", () => {
   v.set("y", "Al", { category: "PERSON", label: "Name" });
   assert.deepEqual(new VaultDetector(v).detect("Al went home"), []);
 });
+
+test("IDs such as UUIDs are not phone or Aadhaar numbers", () => {
+  const found = new RuleDetector().detect("requestId 3c7fa8b6-525a-4c83-8d59-803259d81f5a:0 and ref a-9876543210-b");
+  assert.deepEqual(found.filter((f) => f.category === "PHONE" || f.category === "AADHAAR"), []);
+  // A real number next to punctuation is still found.
+  assert.equal(new RuleDetector().detect("call (9876543210).").some((f) => f.category === "PHONE"), true);
+});
+
+test("site text is cleaned silently; only the visitor's own words ask for review", async () => {
+  const asked = [];
+  const gate = new AirlockGate({ onReview: (rep) => { asked.push(rep); return true; } });
+  const req = { messages: [
+    { role: "system", content: "Write to payments@hopemeals.org" },
+    { role: "user", content: "What does ₹3,000 fund?" },
+    { role: "tool", tool_call_id: "1", content: "{\"contact\":\"csr@hopemeals.org\"}" },
+  ] };
+  const safe = await gate.gateModelCall(req, "this site's AI service");
+  assert.equal(asked.length, 0);
+  assert.ok(!JSON.stringify(safe).includes("@hopemeals.org"));
+  await gate.gateModelCall({ messages: [{ role: "user", content: "mail me at a@b.in" }] }, "this site's AI service");
+  assert.equal(asked.length, 1);
+  assert.deepEqual(learnLines(asked[0]), ["Email: not shared"]);
+});

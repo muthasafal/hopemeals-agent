@@ -5,8 +5,11 @@
 // It does what the HopeMeals build relies on: "/about" serves about.html, "/about.html"
 // redirects to "/about", unknown paths get 404.html with status 404, and the rules in
 // <dist>/_headers apply (path patterns with * and :placeholders, "! Name" detaches a
-// header set by an earlier rule). /api/* is not run here: it answers 501, and tests
-// intercept it in the browser. Host-based rules (https://...) are skipped.
+// header set by an earlier rule). Host-based rules (https://...) are skipped.
+//
+// Functions: with --functions <dir> (a Pages functions folder), /api/assistant/* runs that
+// folder's api/assistant/[[path]].ts, with variables from --env <.dev.vars file>. Node strips
+// the TypeScript types. Every other /api/* answers 501; tests intercept those in the browser.
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
@@ -71,12 +74,52 @@ async function resolveFile(pathname) {
   return null;
 }
 
+const functionsDir = opt("functions", "");
+const envFile = opt("env", "");
+let assistantHandler = null;
+const env = {};
+if (functionsDir) {
+  const { pathToFileURL } = await import("node:url");
+  assistantHandler = (await import(pathToFileURL(path.resolve(functionsDir, "api/assistant/[[path]].ts")).href)).handle;
+}
+if (envFile) {
+  for (const line of (await readFile(path.resolve(envFile), "utf8")).split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (m) env[m[1]] = m[2].replace(/^"|"$/g, "");
+  }
+}
+
+async function runFunction(req, res, url) {
+  const chunks = [];
+  for await (const c of req) chunks.push(c);
+  const body = chunks.length ? Buffer.concat(chunks) : undefined;
+  const headers = new Headers();
+  for (const [k, v] of Object.entries(req.headers)) if (typeof v === "string") headers.set(k, v);
+  const request = new Request(url, { method: req.method, headers, body: ["GET", "HEAD"].includes(req.method) ? undefined : body });
+  const response = await assistantHandler(request, env);
+  const out = {};
+  response.headers.forEach((v, k) => { out[k] = v; });
+  res.writeHead(response.status, out);
+  if (!response.body) { res.end(); return; }
+  const reader = response.body.getReader();
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    res.write(value);
+  }
+  res.end();
+}
+
 let rules = [];
 try { rules = parseHeaders(await readFile(path.join(root, "_headers"), "utf8")); } catch { /* no _headers */ }
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   let pathname = url.pathname;
+  if (assistantHandler && pathname.startsWith("/api/assistant/")) {
+    try { await runFunction(req, res, url); } catch (err) { res.writeHead(500); res.end(String(err?.message || err)); }
+    return;
+  }
   if (pathname.startsWith("/api/")) {
     res.writeHead(501, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ step: "local", error: "Pages Functions do not run in this local server." }));

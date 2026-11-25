@@ -19,7 +19,7 @@
     },
 
     "llm_config": {
-        "model_name": "alibaba/qwen3.8-flash"
+        "model_name": "gemini-flash-lite-latest"
     },
 
     "max_steps": 10,

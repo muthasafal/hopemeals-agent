@@ -21,10 +21,10 @@
     }
   ],
   "llm_router": {
-    "base_url": "https://api.otari.ai/api/v1",
+    "base_url": "/api/assistant",
+    "publisher_funded": true,
     "mock": false,
-    "byok_router": "https://api.otari.ai/api/v1",
-    "publisher_funded": false
+    "byok_router": "https://api.otari.ai/api/v1"
   },
   "allowed_peers": [
     "http://127.0.0.1:8788"

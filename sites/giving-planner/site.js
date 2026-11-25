@@ -29,7 +29,7 @@ export async function start() {
     const { engine } = await boot("#agent-app", { originUrl: base, sandboxWorkerUrl: new URL("runtime/sandbox-worker.js", base).href });
     wrapConsent(gate, engine, { render: consentRenderer(chat) });
     const needsKey = !engine.mockLLM && !engine.publisherFundedLLM && (!engine.byokKey || engine.byokKey === "demo");
-    status.textContent = needsKey ? "The assistant needs your own AI provider key. Add it in AI model settings below." : "Assistant ready.";
+    status.textContent = needsKey ? "The assistant is not switched on yet. The planner above still works." : "Assistant ready.";
     if (!needsKey) {
       const first = document.querySelector("#ns-msgs .ns-msg.bot");
       if (first) first.textContent = GREETING;
