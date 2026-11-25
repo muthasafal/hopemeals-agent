@@ -26,6 +26,7 @@ a { color: var(--teal-deep); font-weight: 700; text-decoration-thickness: 2px; t
 :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 8px; }
 h1, h2 { color: var(--ink); font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
 .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+.band .wrap, .foot .wrap, .page-hero .wrap { width: min(1120px, 100%); }
 
 .top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px max(16px, calc((100% - 1120px) / 2)); background: rgba(243, 248, 252, 0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font: 600 1.25rem var(--display); text-decoration: none; }
@@ -44,7 +45,7 @@ h1, h2 { color: var(--ink); font-family: var(--display); font-weight: 600; lette
 .blob-a { width: 420px; height: 360px; right: -80px; top: -60px; background: var(--mint); }
 .blob-b { width: 260px; height: 240px; right: 220px; bottom: -110px; background: var(--teal-50); animation-delay: -6s; }
 
-.band { position: relative; background: var(--sky); padding: 64px 0 80px; }
+.band { position: relative; background: var(--sky); padding: 64px 16px 80px; }
 .wave { position: absolute; left: 0; right: 0; top: -40px; height: 42px; background: var(--sky); clip-path: path("M0 40 C 240 0 480 0 720 22 S 1200 44 1920 8 L 1920 42 L 0 42 Z"); }
 .planner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 32px; align-items: center; }
 .panel { background: #fff; border: 1px solid var(--line); border-radius: 32px; padding: 32px; box-shadow: var(--shadow); }
@@ -170,10 +171,10 @@ body > dialog button { margin: 8px 8px 0 0; min-height: 44px; padding: 10px 20px
 .foot-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; align-items: center; }
 .foot-grid p { margin: 0; max-width: 640px; }
 .foot nav { display: flex; flex-wrap: wrap; gap: 6px 20px; }
-.foot { padding-left: 0; padding-right: 0; }
+.foot { padding-left: 16px; padding-right: 16px; }
 
 /* Legal pages */
-.page-hero { position: relative; overflow: hidden; padding: 56px 0 48px; background: var(--sky); }
+.page-hero { position: relative; overflow: hidden; padding: 56px 16px 48px; background: var(--sky); }
 .page-hero h1 { margin: 12px 0 8px; font-size: clamp(2.2rem, 4.2vw, 3.4rem); line-height: 1.05; }
 .page-hero p { max-width: 640px; margin: 0; font-size: 1.1rem; }
 .crumbs ol { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 0.95rem; }
