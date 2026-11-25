@@ -28,7 +28,7 @@
   color: var(--ag-ink);
 }
 .ag-title:focus { outline: none; }
-.ag-title:focus-visible { outline: 3px solid var(--ag-button); outline-offset: 3px; border-radius: 8px; }
+.ag-title:focus-visible { outline: none; } /* not interactive: focus only moves the reader here */
 .ag-lead { margin: 0 0 8px; font-size: 0.92rem; }
 .ag-list { margin: 0 0 10px; padding-left: 1.2em; font-size: 0.92rem; }
 .ag-list li { margin: 2px 0; }

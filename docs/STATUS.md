@@ -1,4 +1,4 @@
-# Status (25 Nov 2026)
+# Status (25 Nov 2026, second pass)
 
 ## Done
 - `docs/SPEC_NOTES.md`: file formats, the LLM client interface, the four outbound hook points, how partner calls work.
@@ -17,15 +17,22 @@
 | Only new files: `assistant.html` plus `agents/*` | PASS |
 | No changes to functions/, backend, Firebase rules, Razorpay, emails, dashboard | PASS (diff touches only `_headers`, `AppShell.tsx` +2 lines, `routes.ts` +9 lines, new files) |
 | Bridge gets no X-Frame-Options; CORS only on the public agent JSON; CSP on /assistant | PASS (checked with serve-pages) |
-| Donation, signup and contact flows clicked through in a browser on the branch build | **NOT DONE** (left for the next session) |
+| Same visitor steps in Chromium on `main` and branch builds (11 pages, donate order request, contact, volunteer, application steps 1 to 3) | PASS: titles equal, no page errors, `/api/*` request bodies byte-identical (`e2e/regression.spec.mjs`) |
 | `npm run test:functions` | NOT RUN (the functions are unchanged) |
 
 Note: `npm run build` refreshes `src/content/siteContent.json` from live Firebase. I reverted it so it isn't committed.
 
+## E2E (Playwright, LLM mocked)
+- `student.spec.mjs` PASS: the learn card shows before anything is sent; no request body contains the income, name or reservation category; HopeMeals' own form is then filled with them on the device.
+- `planner.spec.mjs` PASS: the consent card names HopeMeals; HopeMeals' network runs in the Planner page and reads facts through its bridge (₹50,000 = 500 days, 1,500 meals); "Donate" opens HopeMeals' window, then `/donate?amount=50000`; the PAN never reaches the provider.
+- `regression.spec.mjs` PASS (above).
+
+Fixed during the browser check: the prefill now waits for React to hydrate the prerendered form (before, college was lost); the donation fallback link no longer shows early; the Planner's jar labels and amount field have more padding; the Planner ground is now pale sky with deep ink (no cream).
+
 ## Left to do
-1. Playwright E2E with a mocked LLM: route `https://api.otari.ai/api/v1/**` to scripted SSE replies, and seed a BYOK profile in localStorage `nsweb-byok-profiles-v1` (`{version:1, selectedId, profiles:[{id,name,key,model,router}]}`). Flows: (a) a student's eligibility check where the request body never contains the income; (b) a donor on the Planner asking HopeMeals what ₹50,000 funds, then "Donate" opening the HopeMeals window. Serve with `node tools/serve-pages.mjs ../../HM/frontend/dist --port 8788` and `node tools/serve-pages.mjs sites/giving-planner --port 8081`, then open the Planner as `http://localhost:8081`. Chromium for Playwright 1.65 still needs installing.
-2. A browser check of `/assistant` itself: boot, the private panel → vault, the iframe prefill on `/signup`, the start_donation dialog, and the styling against DESIGN.md. None of this has been run in a browser yet.
-3. The browser regression row above.
-4. Write the README and `docs/UPSTREAM.md` (issue #32 hooks proposal and PR text). **Ask the user before opening anything on cognizant-ai-labs.**
-5. Owner decisions: whether HopeMeals has a published income limit (until then income shows as "provided, kept on this device"), the hosted Planner origin for `bridge/handoff-window.js` CALLERS, `index: false` on /assistant, and pushing the HM branch.
-6. Clean-up: the `../_vendor/hm-main` git worktree (`git worktree remove`) once regression testing is done.
+1. Owner decisions: whether HopeMeals has a published income limit (until then income shows as "provided, kept on this device"); the hosted Planner origin for `bridge/handoff-window.js` CALLERS and the Planner's partner URL; `index: false` on /assistant; pushing the HM branch (commits `4165712`, `1a733c8`, `e0891c4`, local only).
+2. The runtime's settings panel also offers OpenAI, Anthropic and Groq, but the /assistant CSP allows only Otari, OpenRouter and Google (as the brief says). Picking one of those three fails with a CSP error. Either widen `connect-src` or accept it. This is the owner's choice.
+3. Live check with a real key and real Gemini Nano (everything so far is mocked). On a Cloudflare preview deployment: check `_headers` behave as `tools/serve-pages.mjs` simulates.
+4. Upstream: post the #32 comment in `docs/UPSTREAM.md`, then a PR if the maintainers want one. **Only after Safal approves.**
+5. Not exercised: the application's final submit and uploads (`/api/uploads`, `/api/submitApplication`): the branch does not touch them, and the static and browser comparisons cover the page itself.
+6. Remove the `../_vendor/hm-main` worktree when done (`git worktree remove`, from HM/frontend).

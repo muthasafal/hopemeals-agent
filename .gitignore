@@ -11,3 +11,5 @@ coverage/
 .DS_Store
 Thumbs.db
 # Keep .kiro/ tracked: Kiroween requires it in the repo.
+test-results/
+playwright-report/
