@@ -1,0 +1,18 @@
+{
+  "protocol": "nsdeploy-link/v1",
+  "exports": [
+    {
+      "network": "pune_giving_planner",
+      "front_man": "giving_planner",
+      "aliases": [
+        "pune_giving_planner",
+        "giving_planner"
+      ],
+      "url": "pune_giving_planner"
+    }
+  ],
+  "imports": [],
+  "link_updates": {
+    "mode": "browser-local"
+  }
+}

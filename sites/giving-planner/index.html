@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pune Giving Planner | Plan a year of giving, then ask the charity</title>
+    <meta name="description" content="Spread your giving across the year, then ask a partner charity's own assistant what your money does. An open agentic web demo that keeps your private details on your device." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0f766e" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600&family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="lib/airlock-gate/airlock-gate.css" />
+    <script type="module" src="planner.js"></script>
+    <script type="module" src="site.js"></script>
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"></span>Pune Giving Planner</a>
+      <nav aria-label="Main"><a href="#planner">Plan</a><a href="#assistant">Ask</a><a href="#how">How it works</a></nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="blob blob-a" aria-hidden="true"></div>
+        <div class="blob blob-b" aria-hidden="true"></div>
+        <div class="hero-text">
+          <h1>Plan a year of giving, then <span class="underline">ask the charity</span> what it does.</h1>
+          <p class="lead">Set what you want to give this year and how to spread it. The planner's assistant asks a partner charity's own assistant what your money funds, using only what that charity publishes.</p>
+          <p class="hand" aria-hidden="true">your plan stays on your device</p>
+        </div>
+      </section>
+
+      <section id="planner" class="band" aria-labelledby="planner-heading">
+        <div class="wave" aria-hidden="true"></div>
+        <div class="wrap planner">
+          <form id="plan-form" class="panel" novalidate>
+            <h2 id="planner-heading">Your giving year</h2>
+            <label for="plan-total">What you want to give this year</label>
+            <div class="amount">
+              <span aria-hidden="true">₹</span>
+              <input id="plan-total" name="total" type="number" inputmode="numeric" min="100" max="10000000" step="100" value="36000" />
+            </div>
+            <label for="plan-months">Spread over</label>
+            <input id="plan-months" name="months" type="range" min="1" max="12" step="1" value="12" />
+            <p id="plan-summary" class="summary" aria-live="polite"></p>
+            <p id="plan-error" class="error" role="alert"></p>
+          </form>
+          <div class="year" role="img" id="year" aria-label="Your giving year">
+            <div id="jars" class="jars"></div>
+            <p class="year-note">Each jar is a month. The charity, not this planner, says what a month's gift does.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="assistant" class="assistant-section" aria-labelledby="assistant-heading">
+        <div class="wrap assistant-grid">
+          <div>
+            <h2 id="assistant-heading">Ask about your plan</h2>
+            <p>The assistant can set your plan, and ask <a id="partner-hopemeals" href="http://127.0.0.1:8788/">HopeMeals</a> (student meals in Pune) what an amount funds and how its 80G receipts work. It shows you a card before it contacts HopeMeals, and HopeMeals' own window opens if you choose to donate.</p>
+            <p class="note">Your messages go to the AI provider you pick in AI model settings, with your own key. Private details such as your PAN, phone or email are taken out on this device first; the card shows exactly what is sent.</p>
+            <p id="assistant-status" role="status">Connecting the assistant. If this stays, the assistant could not load; the planner above still works.</p>
+          </div>
+          <div id="agent-app">
+            <div data-ns-slot="header"></div>
+            <div class="assistant-panels">
+              <div data-ns-slot="chat"></div>
+              <div data-ns-slot="agents"></div>
+            </div>
+            <div data-ns-slot="settings"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" class="how" aria-labelledby="how-heading">
+        <div class="wrap">
+          <h2 id="how-heading">How it works</h2>
+          <ol class="steps">
+            <li><strong>You plan here.</strong> Your total and months stay in this page.</li>
+            <li><strong>The assistant asks the charity.</strong> After you allow it on a card, it runs HopeMeals' published agent network in your browser, on your own AI key. HopeMeals answers only from its own site.</li>
+            <li><strong>You give on the charity's site.</strong> Donating opens HopeMeals' own page. This planner never takes money.</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>Pune Giving Planner is a demo of the <a href="https://github.com/cognizant-ai-labs/agentic-web">Open Agentic Web</a>, with <a href="https://github.com/muthasafal/hopemeals-agent">airlock-gate</a> keeping private details on your device. It is not a charity and holds no money.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "brand": "Pune Giving Planner",
+  "networks": [
+    {
+      "name": "pune_giving_planner",
+      "front_man": "giving_planner",
+      "hocon": "./pune_giving_planner.network.json",
+      "description": "Plan a year of giving and ask HopeMeals' own assistant what your money funds.",
+      "tags": [
+        "agentified-website",
+        "giving",
+        "pune"
+      ],
+      "sample_queries": [
+        "Spread 60,000 rupees over 6 months",
+        "What does 50,000 rupees fund at HopeMeals?",
+        "How do 80G receipts work if I donate to HopeMeals?",
+        "I want to donate this month's amount to HopeMeals",
+        "Can you file my income tax return for me?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "mock": false,
+    "byok_router": "https://api.otari.ai/api/v1",
+    "publisher_funded": false
+  },
+  "allowed_peers": [
+    "http://127.0.0.1:8788"
+  ],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "This site calls the partner sites in allowed_peers after the visitor agrees on a card."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "pune_giving_planner",
+    "front_man": "giving_planner",
+    "available": false,
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "theme": {
+    "primary": "#0F766E"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "pune_giving_planner",
+        "front_man": "giving_planner",
+        "aliases": [
+          "pune_giving_planner",
+          "giving_planner"
+        ],
+        "url": "pune_giving_planner"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": [
+      "get_plan",
+      "set_plan"
+    ]
+  }
+}

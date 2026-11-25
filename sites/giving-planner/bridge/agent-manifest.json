@@ -1,0 +1,10 @@
+{
+  "networks": [
+    {
+      "name": "pune_giving_planner"
+    }
+  ],
+  "actions": {
+    "version": 1
+  }
+}

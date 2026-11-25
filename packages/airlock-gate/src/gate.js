@@ -80,6 +80,9 @@ export class AirlockGate {
     if (typeof text !== "string" || !text) return { text: text ?? "", items: [], segments: [] };
     const all = [];
     for (const d of this.detectors) {
+      // Extra detectors (Nano, the scrub engine) only matter for the visitor's own words;
+      // in site text their findings would be dropped anyway, so skip the cost.
+      if (strict && d.id !== "rules" && d.id !== "vault") continue;
       try {
         all.push(...(await d.detect(text)));
       } catch (err) {
